@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package dd.sitl;
+package ddln;
 
-import "common.proto";
+import "ddln_common.proto";
 
 message Intrinsics {
     float verticalFieldOfView_deg = 1;

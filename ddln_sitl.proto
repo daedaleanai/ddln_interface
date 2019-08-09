@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package ddln;
+
+import "ddln_common.proto";
+
+message UpdatePoseRequest {
+    int64 timestamp_ns = 1;
+    Pose pose = 2;
+}
+
+message UpdatePoseResponse {
+}
+
+service SitlService {
+    rpc UpdatePose(UpdatePoseRequest) returns (UpdatePoseResponse);
+}
