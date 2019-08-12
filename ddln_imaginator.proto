@@ -28,6 +28,9 @@ message ImageResponse {
     bytes image = 1; // pixel array in requested format, 8UC1 for GRAY, 8UC3 for RGB/BGR, and so on.
 }
 
+message WorldInfoRequest {
+}
+
 message WorldInfo {
     string name = 1;
     Point3d home = 2; // position in ENU coordinates of the home (geo referenced) point.
@@ -36,5 +39,5 @@ message WorldInfo {
 
 service ImageService {
     rpc GenerateImage(ImageRequest) returns (ImageResponse);
-    rpc GetWorldInfo(google.protobuf.Empty) returns (WorldInfo);
+    rpc GetWorldInfo(WorldInfoRequest) returns (WorldInfo);
 }

@@ -2,8 +2,6 @@ syntax = "proto3";
 
 package ddln;
 
-import "google/protobuf/empty.proto";
-
 message Point3d {
     double x = 1;
     double y = 2;
