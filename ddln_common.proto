@@ -1,21 +1,21 @@
-syntax = "proto3";
+syntax = "proto2";
 
 package ddln;
 
 message Point3d {
-    double x = 1;
-    double y = 2;
-    double z = 3;
+    required double x = 1;
+    required double y = 2;
+    required double z = 3;
 }
 
 message Quaternion {
-    double w = 1;
-    double x = 2;
-    double y = 3;
-    double z = 4;
+    required double w = 1;
+    required double x = 2;
+    required double y = 3;
+    required double z = 4;
 }
 
 message Pose {
-    Point3d position = 1;
-    Quaternion orientation = 2;
+    optional Point3d position = 1;
+    optional Quaternion orientation = 2;
 }
