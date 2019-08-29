@@ -1,11 +1,11 @@
-syntax = "proto3";
+syntax = "proto2";
 
 package ddln;
 
 import "ddln_common.proto";
 
 message Intrinsics {
-    float verticalFieldOfView_deg = 1;
+    required float verticalFieldOfView_deg = 1;
 }
 
 enum ImageFormat {
@@ -17,24 +17,24 @@ enum ImageFormat {
 }
 
 message ImageRequest {
-    ImageFormat format = 1;
-    uint32 width = 2;
-    uint32 height = 3;
-    Intrinsics intrinsics = 4;
-    Pose extrinsics_WC = 5;
+    required ImageFormat format = 1;
+    required uint32 width = 2;
+    required uint32 height = 3;
+    optional Intrinsics intrinsics = 4;
+    optional Pose extrinsics_WC = 5;
 }
 
 message ImageResponse {
-    bytes image = 1; // pixel array in requested format, 8UC1 for GRAY, 8UC3 for RGB/BGR, and so on.
+    required bytes image = 1; // pixel array in requested format, 8UC1 for GRAY, 8UC3 for RGB/BGR, and so on.
 }
 
 message WorldInfoRequest {
 }
 
 message WorldInfo {
-    string name = 1;
-    Point3d home = 2; // position in ENU coordinates of the home (geo referenced) point.
-    Point3d start = 3; // position in ENU coordinates of the SITL start location.
+    optional string name = 1;
+    optional Point3d home = 2; // position in ENU coordinates of the home (geo referenced) point.
+    optional Point3d start = 3; // position in ENU coordinates of the SITL start location.
 }
 
 service ImageService {

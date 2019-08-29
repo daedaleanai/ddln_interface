@@ -1,12 +1,12 @@
-syntax = "proto3";
+syntax = "proto2";
 
 package ddln;
 
 import "ddln_common.proto";
 
 message UpdatePoseRequest {
-    int64 timestamp_ns = 1;
-    Pose pose_ENU = 2;
+    optional int64 timestamp_ns = 1;
+    optional Pose pose_ENU = 2;
 }
 
 message UpdatePoseResponse {
