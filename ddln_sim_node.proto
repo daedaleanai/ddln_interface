@@ -1,0 +1,14 @@
+syntax = "proto2";
+
+package ddln;
+
+import "ddln_common.proto";
+
+message Failures {
+    optional bool no_gps = 1;
+    optional bool not_implemented = 200;
+}
+
+service SimNodeService {
+    rpc setFailures(Failures) returns (Failures);
+}
