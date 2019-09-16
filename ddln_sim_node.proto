@@ -16,6 +16,6 @@ message Failures {
 }
 
 service SimNodeService {
-    rpc getGroundTruth(Empty) returns (GroundTruth);
-    rpc setFailures(Failures) returns (Failures); // returns confirmation of applied AND implemented failures
+    rpc GetGroundTruth(Empty) returns (GroundTruth);
+    rpc SetFailures(Failures) returns (Failures); // returns confirmation of applied AND implemented failures
 }
