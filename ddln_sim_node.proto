@@ -1,13 +1,14 @@
 syntax = "proto2";
 
-package ddln;
+package ddln.sim_node;
 
 import "ddln_common.proto";
 
 message GroundTruth {
     optional int64 timestamp_ns = 1;
-    optional Pose pose_ENU = 2;
-    optional LatLongAlt lla = 3;
+    optional Pose pose = 2; // Pose in ENU or ECEF coordinate frame
+    enum Type {ENU = 0; ECEF = 1;}
+    optional Type type = 3;
 }
 
 message Failures {
