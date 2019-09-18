@@ -1,6 +1,6 @@
 syntax = "proto2";
 
-package ddln.sim_node;
+package ddln;
 
 import "ddln_common.proto";
 

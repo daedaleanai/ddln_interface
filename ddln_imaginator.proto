@@ -1,14 +1,14 @@
 syntax = "proto2";
 
-package ddln.imaginator;
+package ddln;
 
 import "ddln_common.proto";
 
-message Intrinsics {
+message CameraIntrinsics {
     required float verticalFieldOfView_deg = 1;
 }
 
-message Object {
+message SceneObject {
     optional string identifier = 1;
     optional Pose pose = 2; // pose in ENU coordinates
 }
@@ -25,9 +25,9 @@ message ImageRequest {
     required ImageFormat format = 1;
     required uint32 width = 2;
     required uint32 height = 3;
-    optional Intrinsics intrinsics = 4;
+    optional CameraIntrinsics intrinsics = 4;
     optional Pose extrinsics_WC = 5;
-    repeated Object objects = 6;
+    repeated SceneObject objects = 6;
 }
 
 message ImageResponse {
