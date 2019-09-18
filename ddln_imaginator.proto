@@ -9,7 +9,7 @@ message CameraIntrinsics {
 }
 
 message SceneObject {
-    optional string identifier = 1;
+    optional string type = 1;
     optional Pose pose = 2; // pose in ENU coordinates
 }
 
