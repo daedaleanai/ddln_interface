@@ -17,12 +17,6 @@ message Quaternion {
     required double z = 4;
 }
 
-message LatLongAlt {
-    required double latitude_rad = 1;
-    required double longitude_rad = 2;
-    required double altitude_m = 3;
-}
-
 message Pose {
     optional Point3d position = 1;
     optional Quaternion orientation = 2;
