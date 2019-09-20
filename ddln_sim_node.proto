@@ -10,5 +10,5 @@ message Failures {
 }
 
 service SimNodeService {
-    rpc setFailures(Failures) returns (Failures); // returns message is intended as confirmation of applied AND implemented failures
+    rpc SetFailures(Failures) returns (Failures); // returns confirmation of applied AND implemented failures
 }
