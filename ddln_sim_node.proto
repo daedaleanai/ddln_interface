@@ -4,11 +4,17 @@ package ddln;
 
 import "ddln_common.proto";
 
+message GroundTruth {
+    optional int64 timestamp_ns = 1;
+    optional Pose pose = 2; // Airframe pose in ENU coordinates
+}
+
 message Failures {
     optional bool no_gps = 1;
     optional bool not_implemented = 200; // used for testing, do not implement.
 }
 
 service SimNodeService {
+    rpc GetGroundTruth(Empty) returns (GroundTruth);
     rpc SetFailures(Failures) returns (Failures); // returns confirmation of applied AND implemented failures
 }
