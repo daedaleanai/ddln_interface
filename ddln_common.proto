@@ -23,7 +23,7 @@ message Pose {
 }
 
 message LatLongAlt {
-    optional double latitude_rad = 1;
-    optional double longitude_rad = 2;
+    optional double latitude_deg = 1;
+    optional double longitude_deg = 2;
     optional double altitude_m = 3;
 }
