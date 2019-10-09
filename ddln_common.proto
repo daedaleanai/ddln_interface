@@ -21,3 +21,9 @@ message Pose {
     optional Point3d position = 1;
     optional Quaternion orientation = 2;
 }
+
+message LatLongAlt {
+    optional double latitude_deg = 1;
+    optional double longitude_deg = 2;
+    optional double altitude_m = 3;
+}

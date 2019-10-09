@@ -38,6 +38,7 @@ message WorldInfo {
     optional string name = 1;
     optional Point3d home = 2; // position in ENU coordinates of the home (geo referenced) point.
     optional Point3d start = 3; // position in ENU coordinates of the SITL start location.
+    optional LatLongAlt home_geo = 4;
 }
 
 service ImageService {
