@@ -13,5 +13,6 @@ message UpdatePoseResponse {
 }
 
 service SitlService {
+    rpc SetOrigin(LatLongAlt) returns (Empty);
     rpc UpdatePose(UpdatePoseRequest) returns (UpdatePoseResponse);
 }
