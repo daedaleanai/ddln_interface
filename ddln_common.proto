@@ -2,14 +2,30 @@ syntax = "proto2";
 
 package ddln;
 
+// Points and orientations are expressed with respect to the following frames:
+//
+// W: World (fixed) frame
+//    Origin: not prescribed
+//    Orientation: x=East, y=North, z=Up
+//
+// C: Camera (mobile) frame     
+//    Origin: camera optical center.
+//    Orientation: x=right on the image, y=down on the image, z=optical axis
+
 message Empty {}
 
+// Defines a point in a Euclidean coordinate frame. By convention, variables of this type should be suffixed with the
+// coordinate system they are expressed in, for example p_W if p is expressed in the W frame.
 message Point3d {
     required double x = 1;
     required double y = 2;
     required double z = 3;
 }
 
+// Quaternions are used to represent a rotation and we make the restriction that they must have norm equal to 1.
+// The unit-normed quaternions be understood as a rotation around an axis defined by (x, y, z) and a magnitude of
+// arccos(w) / 2. By conventions the quaternion that transforms a vector in coordinate frame X to coordinate frame Y should
+// be named q_YX.
 message Quaternion {
     required double w = 1;
     required double x = 2;
@@ -17,11 +33,14 @@ message Quaternion {
     required double z = 4;
 }
 
+// Specifies a transformation of one coordinate frame with respect to another.
+// By convention the pose of the camera expressed in the world frame would be named pose_WC.
 message Pose {
     optional Point3d position = 1;
     optional Quaternion orientation = 2;
 }
 
+// Represents a point in an Earth-fixed coordinate frame. Altitude is defined as the height above the geoid.
 message LatLongAlt {
     optional double latitude_deg = 1;
     optional double longitude_deg = 2;
