@@ -28,6 +28,7 @@ message ImageRequest {
     optional CameraIntrinsics intrinsics = 4;
     optional Pose extrinsics_WC = 5;
     repeated SceneObject objects = 6;
+    optional bool auxiliary = 7; // request auxiliary (segmented) image instead of regular image
 }
 
 message ImageResponse {
