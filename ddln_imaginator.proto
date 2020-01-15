@@ -28,6 +28,11 @@ message ImageRequest {
     optional CameraIntrinsics intrinsics = 4;
     optional Pose extrinsics_WC = 5;
     repeated SceneObject objects = 6;
+    enum Type {
+        DEFAULT = 0; // regular image
+        AUXILIARY = 1; // e.g. segmented image
+    }
+    optional Type type = 7;
 }
 
 message ImageResponse {
