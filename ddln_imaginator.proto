@@ -21,6 +21,24 @@ enum ImageFormat {
     GRAY = 4;
 }
 
+message Environment {
+    message Clouds {
+        enum Type {
+            NONE = 0;
+            ALTOCUMULUS = 1;
+            CLOUDS_BASE = 2;
+            CUMULUS = 3;
+            NIMBOSTRATUS = 4;
+            STRATOCUMULUS = 5;
+            STRATUS = 6;
+        }
+        optional Type type = 1;
+        optional float altitude_m = 2;
+        optional Point3d velocity = 3; // Only use the directional x,y,z values to set the wind in the Engine.
+    }
+    optional Clouds clouds = 1;
+}
+
 message ImageRequest {
     required ImageFormat format = 1;
     required uint32 width = 2;
@@ -33,6 +51,7 @@ message ImageRequest {
         AUXILIARY = 1; // e.g. segmented image
     }
     optional Type type = 7;
+    optional Environment environment = 8;
 }
 
 message ImageResponse {
