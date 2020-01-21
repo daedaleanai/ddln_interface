@@ -37,6 +37,16 @@ message Environment {
         optional Point3d velocity = 3; // Only use the directional x,y,z values to set the wind in the Engine.
     }
     optional Clouds clouds = 1;
+
+    message Visibility {
+        enum Type {
+            NONE = 0;
+            HAZE = 1;
+            FOG = 2;
+        }
+        optional Type type = 1;
+        optional float intensity = 2; // scaled 0-1.
+    }
 }
 
 message ImageRequest {
