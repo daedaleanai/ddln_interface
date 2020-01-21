@@ -47,6 +47,7 @@ message Environment {
         optional Type type = 1;
         optional float intensity = 2; // scaled 0-1.
     }
+    optional Visibility visibility = 2;
 }
 
 message ImageRequest {
