@@ -48,6 +48,13 @@ message Environment {
         optional float intensity = 2; // scaled 0-1.
     }
     optional Visibility visibility = 2;
+
+    message Sun {
+        optional float azimuth_deg = 1;
+        optional float altitude_deg = 2; // in range of 0 - 90 degree.
+        optional float intensity = 3; // scaled 0 - 1.
+    }
+    optional Sun sun = 3;
 }
 
 message ImageRequest {
