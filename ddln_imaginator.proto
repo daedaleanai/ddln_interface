@@ -63,7 +63,7 @@ message Environment {
             SNOW = 2;
         }
         optional Type type = 1;
-        optional float heaviness = 2; // scaled 0 - 1.
+        optional float intensity = 2; // scaled 0 - 1.
     }
     optional Precipitation precipitation = 4;
 }
