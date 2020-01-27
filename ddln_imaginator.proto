@@ -55,6 +55,17 @@ message Environment {
         optional float intensity = 3; // scaled 0 - 1.
     }
     optional Sun sun = 3;
+
+    message Precipitation {
+        enum Type {
+            NONE = 0;
+            RAIN = 1;
+            SNOW = 2;
+        }
+        optional Type type = 1;
+        optional float heaviness = 2; // scaled 0 - 1.
+    }
+    optional Precipitation precipitation = 4;
 }
 
 message ImageRequest {
