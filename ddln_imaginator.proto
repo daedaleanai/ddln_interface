@@ -38,23 +38,34 @@ message Environment {
     }
     optional Clouds clouds = 1;
 
-    message Visibility {
+    message Haze {
         enum Type {
-            NONE = 0;
-            HAZE = 1;
-            FOG = 2;
+            DEFAULT = 0; // Visibility = 20000, density = 1
+            CUSTOM = 1; // Custom visibility and density as specified below
         }
         optional Type type = 1;
-        optional float intensity = 2; // scaled 0-1.
+        optional float visibility = 2; // recommended 0 - 20000
+        optional float density = 3; // recommended 0.001 - 100
     }
-    optional Visibility visibility = 2;
+    optional Haze haze = 2;
+
+    message Fog {
+        optional bool enabled = 1;
+        optional float multiplier = 2 ; // recommended 0.01 - 0.0001
+    }
+    optional Fog fog = 3;
 
     message Sun {
-        optional float azimuth_deg = 1;
-        optional float altitude_deg = 2; // in range of 0 - 90 degree.
-        optional float intensity = 3; // scaled 0 - 1.
+        enum Type {
+            DEFAULT = 0;
+            CUSTOM = 1;
+        }
+        optional Type type = 1;
+        optional float azimuth_deg = 2;
+        optional float altitude_deg = 3; // should not exceed 90 degree.
+        optional float intensity = 4; // scaled 0 - 1
     }
-    optional Sun sun = 3;
+    optional Sun sun = 4;
 
     message Precipitation {
         enum Type {
@@ -63,9 +74,9 @@ message Environment {
             SNOW = 2;
         }
         optional Type type = 1;
-        optional float intensity = 2; // scaled 0 - 1.
+        optional float intensity = 2; // scaled 0 - 1
     }
-    optional Precipitation precipitation = 4;
+    optional Precipitation precipitation = 5;
 }
 
 message ImageRequest {
