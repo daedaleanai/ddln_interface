@@ -34,11 +34,12 @@ message Environment {
         }
         optional Type type = 1;
         optional float altitude_m = 2;
-        optional Point3d velocity = 3; // Only use the directional x,y,z values to set the wind in the Engine.
+        optional float density = 3; // Changes the cloudiness.
+        optional Point3d velocity = 4; // Only use the directional x,y,z values to set the wind in the Engine.
     }
-    optional Clouds clouds = 1;
+    repeated Clouds clouds = 1;
 
-    message Haze {
+    message Haze { // Small dry particles in the air. Keeps the brightness and color of the light.
         enum Type {
             DEFAULT = 0; // Visibility = 20000, density = 1
             CUSTOM = 1; // Custom visibility and density as specified below
@@ -49,7 +50,7 @@ message Environment {
     }
     optional Haze haze = 2;
 
-    message Fog {
+    message Fog { // Water droplets in the air. White colored fog which obstructs the light source.
         optional bool enabled = 1;
         optional float multiplier = 2 ; // recommended 0.01 - 0.0001
     }
@@ -57,8 +58,8 @@ message Environment {
 
     message Sun {
         enum Type {
-            DEFAULT = 0;
-            CUSTOM = 1;
+            DEFAULT = 0; // Keeps the sun attached with the world. Parameters are not changeable.
+            CUSTOM = 1; // Customized sun with parameters below
         }
         optional Type type = 1;
         optional float azimuth_deg = 2;
