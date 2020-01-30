@@ -10,9 +10,8 @@ message CameraIntrinsics {
 
 message SceneObject {
     optional string type = 1;
-
-    // pose in ENU coordinates
-    optional Pose pose = 2;
+    // pose of object A in world frame W (see ddln_common.proto)
+    optional Pose pose_WA = 2;
 }
 
 enum ImageFormat {
