@@ -9,8 +9,8 @@ import "ddln_common.proto";
 // This file contains interface definitions for Daedalean's cloud image generator: Imaginator.
 // Imaginator is a cloud rendering service which takes image requests and returns generated images.
 // Typically an image request consists of camera intrinsics, extrinsics, environmental conditions, and so on.
-// The service aims to be stateless, meaning an image request would yields a deterministic response.
-// However, due to internal rendering buffers and environment features this deterministic response is not guaranteed.
+// The service aims to be stateless, meaning an image request would yields a deterministic response. However, due to
+// internal rendering buffers and some environment features this deterministic response is not guaranteed.
 // Daedalean provides a range of scenery using different cloud endpoints.
 // Contact sim@daedalean.ai for more information and usage.
 //
