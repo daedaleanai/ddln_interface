@@ -11,6 +11,10 @@ package ddln;
 // C: Camera (mobile) frame     
 //    Origin: camera optical center.
 //    Orientation: x=right on the image, y=down on the image, z=optical axis
+//
+// A: Aircraft (mobile) frame
+//    Origin: not prescribed.
+//    Orientation with respect to the aircraft: x=forward, y=left, z=up.
 
 message Empty {}
 
