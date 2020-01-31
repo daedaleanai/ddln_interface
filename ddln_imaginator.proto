@@ -9,6 +9,8 @@ import "ddln_common.proto";
 // This file contains interface definitions for Daedalean's cloud image generator: Imaginator.
 // Imaginator is a cloud rendering service which takes image requests and returns generated images.
 // Typically an image request consists of camera intrinsics, extrinsics, environmental conditions, and so on.
+// The service aims to be stateless, meaning an image request would yields a deterministic response.
+// However, due to internal rendering buffers and environment features this deterministic response is not guaranteed.
 // Daedalean provides a range of scenery using different cloud endpoints.
 // Contact sim@daedalean.ai for more information and usage.
 //
@@ -23,7 +25,7 @@ message CameraIntrinsics {
 
 message SceneObject {
     optional string type = 1;
-    optional Pose pose_WA = 2; // pose of object A in world frame W (see ddln_common.proto)
+    optional Pose pose_WA = 2;
 }
 
 enum ImageFormat {
@@ -53,41 +55,63 @@ message Environment {
             STRATUS = 6;
         }
         optional Type type = 1;
-        optional float altitude = 2; // Cloud altitude in world coordinate frame [m]
-        optional float density = 3;  // density value, typical range 0..1 [-]
-        optional Point3d velocity = 4;  // directional x, y, z values to set the wind in ENU coordinates system [m/s]
+
+        // Cloud altitude in world coordinate frame [m]
+        optional float altitude = 2;
+
+        // density value, typical range 0..1 [-]
+        optional float density = 3;
+
+        // directional x, y, z values to set the wind in ENU coordinates system [m/s]
+        optional Point3d velocity = 4;
     }
     repeated Clouds clouds = 2; // Up to 3 layers supported
 
     // Haze: simulates dry particles in the air. Acts like a fog but keeps the brightness and color of the light.
     message Haze {
         enum Type {
-            DEFAULT = 0; // default setting, e.g. visibility = 20000, density = 1
-            CUSTOM = 1; // Custom visibility and density as specified below
+            // default setting, e.g. visibility = 20000, density = 1
+            DEFAULT = 0;
+
+            // Custom visibility and density as specified below
+            CUSTOM = 1;
         }
         optional Type type = 1;
-        optional float visibility = 2;  // visibility distance [m]
-        optional float density = 3; // density value:, typical range 0.001..100 [-]
+
+        // visibility distance [m]
+        optional float visibility = 2;
+
+        // density value:, typical range 0.001..100 [-]
+        optional float density = 3;
     }
     optional Haze haze = 3;
 
     // Fog: water droplets in the air. White colored fog which obstructs the light source.
     message Fog {
         optional bool enabled = 1;
-        optional float multiplier = 2 ;  // fog multiplier value, typical range 0.01..0.0001 [-]
+        optional float multiplier = 2 ;
     }
     optional Fog fog = 4;
 
     // Control sun position and intensity
     message Sun {
         enum Type {
-            DEFAULT = 0; // Default uses the sun attached with the world. parameters are not changeable.
-            CUSTOM = 1; // customized sun with parameters below
+            // Default uses the sun attached with the world. parameters are not changeable.
+            DEFAULT = 0;
+
+            // customized sun with parameters below
+            CUSTOM = 1;
         }
         optional Type type = 1;
-        optional float azimuth_deg = 2; // Azimuth sun angle, range 0..360 [deg]
-        optional float altitude_deg = 3; // altitude, ranges 0..90 [deg]
-        optional float intensity = 4; // intensity value, typical range 0..1 [-]
+
+        // Azimuth sun angle, range 0..360 [deg]
+        optional float azimuth_deg = 2;
+
+        // altitude, ranges 0..90 [deg]
+        optional float altitude_deg = 3;
+
+        // intensity value, typical range 0..1 [-]
+        optional float intensity = 4;
     }
     optional Sun sun = 5;
 
@@ -100,7 +124,9 @@ message Environment {
     // and rendering result may be affected by other client requests.
     message Rain {
         optional bool enabled = 1;
-        optional float intensity = 2; // intensity value, typical range 0..1 [-]
+
+        // intensity value, typical range 0..1 [-]
+        optional float intensity = 2;
 
     }
     optional Rain rain = 6;
@@ -112,7 +138,9 @@ message Environment {
     // and rendering result may be affected by other client requests.
     message Snow {
         optional bool enabled = 1;
-        optional float intensity = 2;  // intensity value, typical range 0..1 [-]
+
+        // intensity value, typical range 0..1 [-]
+        optional float intensity = 2;
 
     }
     optional Snow snow = 7;
@@ -123,24 +151,34 @@ message ImageRequest {
     required uint32 width = 2;
     required uint32 height = 3;
     optional CameraIntrinsics intrinsics = 4;
-    optional Pose extrinsics_WC = 5; // Camera pose C in world frame W (see ddln_common.proto)
+
+    // Camera pose C in world frame W (see ddln_common.proto)
+    optional Pose extrinsics_WC = 5;
     repeated SceneObject objects = 6;
     enum Type {
-        DEFAULT = 0; // regular image
-        AUXILIARY = 1; // e.g. segmented image
+        // regular image
+        DEFAULT = 0;
+
+        // Auxiliary image, e.g. segmented image
+        AUXILIARY = 1;
     }
     optional Type type = 7;
     optional Environment environment = 8;
 }
 
 message ImageResponse {
-    required bytes image = 1; // pixel array in requested format, 8UC1 for GRAY, 8UC3 for RGB/BGR, and so on.
+    // Pixel array in requested format, 8UC1 for GRAY, 8UC3 for RGB/BGR, and so on.
+    required bytes image = 1;
 }
 
 message WorldInfo {
     optional string name = 1;
-    optional Point3d home = 2; // position in ENU coordinates of the home (geo referenced) point.
-    optional Point3d start = 3; // position in ENU coordinates of the SITL start location.
+
+    // position in ENU coordinates of the home (geo referenced) point.
+    optional Point3d home = 2;
+
+    // position in ENU coordinates of the SITL start location.
+    optional Point3d start = 3;
     optional LatLongAlt home_geo = 4;
 }
 
