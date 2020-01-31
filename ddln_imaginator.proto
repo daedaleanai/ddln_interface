@@ -38,10 +38,11 @@ enum ImageFormat {
 }
 
 message Environment {
-    reserved 1; // Reserved for future preset configurations, e.g. CLEAR_SUNNY, HEAVY_RAIN, CUSTOM, and so on.
+    // Reserved for future preset configurations, e.g. CLEAR_SUNNY, HEAVY_RAIN, CUSTOM, and so on.
+    reserved 1;
 
     // Add multiple layers of clouds to the scene.
-    // Note: cloud movement is rendered in real time and contain an internal state.
+    // Note: cloud movement is rendered in real time and contains an internal state.
     // Image requests containing clouds are no longer stateless and rendering result may be affected by
     // other (interrupting) client requests.
     message Clouds {
@@ -65,7 +66,9 @@ message Environment {
         // directional x, y, z values to set the wind in ENU coordinates system [m/s]
         optional Point3d velocity = 4;
     }
-    repeated Clouds clouds = 2; // Up to 3 layers supported
+
+    // Clouds, up to 3 layers supported
+    repeated Clouds clouds = 2;
 
     // Haze: simulates dry particles in the air. Acts like a fog but keeps the brightness and color of the light.
     message Haze {
@@ -125,7 +128,7 @@ message Environment {
     message Rain {
         optional bool enabled = 1;
 
-        // intensity value, typical range 0..1 [-]
+        // Intensity value, typical range 0..1 [-]
         optional float intensity = 2;
 
     }
