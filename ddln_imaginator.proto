@@ -4,14 +4,26 @@ package ddln;
 
 import "ddln_common.proto";
 
+// Imaginator interface definitions
+//
+// This file contains interface definitions for Daedalean's cloud image generator: Imaginator.
+// Imaginator is a cloud rendering service which takes image requests and returns generated images.
+// Typically an image request consists of camera intrinsics, extrinsics, environmental conditions, and so on.
+// Daedalean provides a range of scenery using different cloud endpoints.
+// Contact sim@daedalean.ai for more information and usage.
+//
+// Note 1: Interface units typically are assumed in metric system, e.g. SI units, unless indicated otherwise.
+// Note 2: World coordinates are expressed in local East North Up (ENU) coordinate frame
+// Note 3: Other coordinate frames are defined in ddln_common.proto
+//
+
 message CameraIntrinsics {
     required float verticalFieldOfView_deg = 1;
 }
 
 message SceneObject {
     optional string type = 1;
-    // pose of object A in world frame W (see ddln_common.proto)
-    optional Pose pose_WA = 2;
+    optional Pose pose_WA = 2; // pose of object A in world frame W (see ddln_common.proto)
 }
 
 enum ImageFormat {
@@ -24,6 +36,9 @@ enum ImageFormat {
 }
 
 message Environment {
+    reserved 1; // Reserved for future preset configurations, e.g. CLEAR_SUNNY, HEAVY_RAIN, CUSTOM, and so on.
+
+    // Add multiple layers of clouds to the scene.
     message Clouds {
         enum Type {
             NONE = 0;
@@ -35,78 +50,65 @@ message Environment {
             STRATUS = 6;
         }
         optional Type type = 1;
-        optional float altitude_m = 2;
-
-        // density value: 0 - 1
-        optional float density = 3;
-
-        // directional x,y,z values to set the wind in the Engine.
-        optional Point3d velocity = 4;
+        optional float altitude = 2; // Cloud altitude in world coordinate frame [m]
+        optional float density = 3;  // density value, typical range 0..1 [-]
+        optional Point3d velocity = 4;  // directional x, y, z values to set the wind in ENU coordinates system [m/s]
     }
-    repeated Clouds clouds = 1;
+    repeated Clouds clouds = 2; // Up to 3 layers supported
 
-    // dry particles in the air. it keeps the brightness and color of the light.
+    // Haze: simulates dry particles in the air. Acts like a fog but keeps the brightness and color of the light.
     message Haze {
         enum Type {
-            // default keeps the value; visibility = 20000, density = 1
-            DEFAULT = 0;
-
-            // Custom visibility and density as specified below
-            CUSTOM = 1;
+            DEFAULT = 0; // default setting, e.g. visibility = 20000, density = 1
+            CUSTOM = 1; // Custom visibility and density as specified below
         }
         optional Type type = 1;
-
-        // visibility distance: 0 - 20000
-        optional float visibility = 2;
-
-        // density value: 0.001 - 100
-        optional float density = 3;
+        optional float visibility = 2;  // visibility distance [m]
+        optional float density = 3; // density value:, typical range 0.001..100 [-]
     }
-    optional Haze haze = 2;
+    optional Haze haze = 3;
 
-    // water droplets in the air. white colored fog which obstructs the light source.
+    // Fog: water droplets in the air. White colored fog which obstructs the light source.
     message Fog {
         optional bool enabled = 1;
-
-        // fog multiplier value: 0.01 - 0.0001
-        optional float multiplier = 2 ;
+        optional float multiplier = 2 ;  // fog multiplier value, typical range 0.01..0.0001 [-]
     }
-    optional Fog fog = 3;
+    optional Fog fog = 4;
 
+    // Control sun position and intensity
     message Sun {
         enum Type {
-            // default uses the sun attached with the world. parameters are not changeable.
-            DEFAULT = 0;
-
-            // customized sun with parameters below
-            CUSTOM = 1;
+            DEFAULT = 0; // Default uses the sun attached with the world. parameters are not changeable.
+            CUSTOM = 1; // customized sun with parameters below
         }
         optional Type type = 1;
-        optional float azimuth_deg = 2;
-
-        // altitude should not exceed 90 degrees.
-        optional float altitude_deg = 3;
-
-        // intensity value: 0 - 1
-        optional float intensity = 4;
+        optional float azimuth_deg = 2; // Azimuth sun angle, range 0..360 [deg]
+        optional float altitude_deg = 3; // altitude, ranges 0..90 [deg]
+        optional float intensity = 4; // intensity value, typical range 0..1 [-]
     }
-    optional Sun sun = 4;
+    optional Sun sun = 5;
 
+    // Configure rain particles.
+    // Note 1: The particles are rendered in real time, e.g. subsequent image requests should be made in real time
+    // for realistic rendering.
+    // Note 2: Rain sprites always appear to fall down vertically since camera velocity is not taken into account.
+    // The current implementation is only realistic for low speed camera movement.
     message Rain {
         optional bool enabled = 1;
+        optional float intensity = 2; // intensity value, typical range 0..1 [-]
 
-        // intensity value: 0 - 1
-        optional float intensity = 2;
     }
-    optional Rain rain = 5;
+    optional Rain rain = 6;
 
+    // Configure snow particles
+    // Note: The particles are rendered in real time, e.g. subsequent image requests should be made in real time
+    // for realistic rendering.
     message Snow {
         optional bool enabled = 1;
+        optional float intensity = 2;  // intensity value, typical range 0..1 [-]
 
-        // intensity value: 0 - 1
-        optional float intensity = 2;
     }
-    optional Snow snow = 6;
+    optional Snow snow = 7;
 }
 
 message ImageRequest {
@@ -114,32 +116,24 @@ message ImageRequest {
     required uint32 width = 2;
     required uint32 height = 3;
     optional CameraIntrinsics intrinsics = 4;
-    optional Pose extrinsics_WC = 5;
+    optional Pose extrinsics_WC = 5; // Camera pose C in world frame W (see ddln_common.proto)
     repeated SceneObject objects = 6;
     enum Type {
-        // regular image
-        DEFAULT = 0;
-
-        // e.g. segmented image
-        AUXILIARY = 1;
+        DEFAULT = 0; // regular image
+        AUXILIARY = 1; // e.g. segmented image
     }
     optional Type type = 7;
     optional Environment environment = 8;
 }
 
 message ImageResponse {
-    // pixel array in requested format, 8UC1 for GRAY, 8UC3 for RGB/BGR, and so on.
-    required bytes image = 1;
+    required bytes image = 1; // pixel array in requested format, 8UC1 for GRAY, 8UC3 for RGB/BGR, and so on.
 }
 
 message WorldInfo {
     optional string name = 1;
-
-    // position in ENU coordinates of the home (geo referenced) point.
-    optional Point3d home = 2;
-
-    // position in ENU coordinates of the SITL start location.
-    optional Point3d start = 3;
+    optional Point3d home = 2; // position in ENU coordinates of the home (geo referenced) point.
+    optional Point3d start = 3; // position in ENU coordinates of the SITL start location.
     optional LatLongAlt home_geo = 4;
 }
 
