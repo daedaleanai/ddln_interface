@@ -42,9 +42,6 @@ message Environment {
     reserved 1;
 
     // Add multiple layers of clouds to the scene.
-    // Note: cloud movement is rendered in real time and contains an internal state.
-    // Image requests containing clouds are no longer stateless and rendering result may be affected by
-    // other (interrupting) client requests.
     message Clouds {
         enum Type {
             NONE = 0;
@@ -63,8 +60,9 @@ message Environment {
         // density value, typical range 0..1 [-]
         optional float density = 3;
 
-        // directional x, y, z values to set the wind in ENU coordinates system [m/s]
-        optional Point3d velocity = 4;
+        // Animation offset in meters: phases of particles inside the cloud layer are offset by this value.
+        // Increment this value to get apparent cloud movement. [m]
+        optional Point3d offset = 5;
     }
 
     // Clouds, up to 3 layers supported
