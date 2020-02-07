@@ -60,9 +60,9 @@ message Environment {
         // density value, typical range 0..1 [-]
         optional float density = 3;
 
-        // directional x, y values for displacement in ENU coordinates system [m] and z value for shape changing
-        // effect(curling up). 'z' value does not affect the altitude of the cloud.
-        optional Point3d displacement = 4;
+        // Animation offset in meters: phases of particles inside the cloud layer are offset by this value.
+        // Increment this value to get apparent cloud movement. [m]
+        optional Point3d offset = 5;
     }
 
     // Clouds, up to 3 layers supported
