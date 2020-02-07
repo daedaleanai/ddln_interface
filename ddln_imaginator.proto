@@ -23,11 +23,6 @@ message CameraIntrinsics {
     required float verticalFieldOfView_deg = 1;
 }
 
-message SceneObject {
-    optional string type = 1;
-    optional Pose pose_WA = 2;
-}
-
 enum ImageFormat {
     // Note: OpenCV works with BGR by default
     BGR = 0;
@@ -35,118 +30,6 @@ enum ImageFormat {
     BGRA = 2;
     RGBA = 3;
     GRAY = 4;
-}
-
-message Environment {
-    // Reserved for future preset configurations, e.g. CLEAR_SUNNY, HEAVY_RAIN, CUSTOM, and so on.
-    reserved 1;
-
-    // Add multiple layers of clouds to the scene.
-    // Note: cloud movement is rendered in real time and contains an internal state.
-    // Image requests containing clouds are no longer stateless and rendering result may be affected by
-    // other (interrupting) client requests.
-    message Clouds {
-        enum Type {
-            NONE = 0;
-            ALTOCUMULUS = 1;
-            CLOUDS_BASE = 2;
-            CUMULUS = 3;
-            NIMBOSTRATUS = 4;
-            STRATOCUMULUS = 5;
-            STRATUS = 6;
-        }
-        optional Type type = 1;
-
-        // Cloud altitude in world coordinate frame [m]
-        optional float altitude = 2;
-
-        // density value, typical range 0..1 [-]
-        optional float density = 3;
-
-        // directional x, y, z values to set the wind in ENU coordinates system [m/s]
-        optional Point3d velocity = 4;
-    }
-
-    // Clouds, up to 3 layers supported
-    repeated Clouds clouds = 2;
-
-    // Haze: simulates dry particles in the air. Acts like a fog but keeps the brightness and color of the light.
-    message Haze {
-        enum Type {
-            // default setting, e.g. visibility = 20000, density = 1
-            DEFAULT = 0;
-
-            // Custom visibility and density as specified below
-            CUSTOM = 1;
-        }
-        optional Type type = 1;
-
-        // visibility distance [m]
-        optional float visibility = 2;
-
-        // density value:, typical range 0.001..100 [-]
-        optional float density = 3;
-    }
-    optional Haze haze = 3;
-
-    // Fog: water droplets in the air. White colored fog which obstructs the light source.
-    message Fog {
-        optional bool enabled = 1;
-        optional float multiplier = 2 ;
-    }
-    optional Fog fog = 4;
-
-    // Control sun position and intensity
-    message Sun {
-        enum Type {
-            // Default uses the sun attached with the world. parameters are not changeable.
-            DEFAULT = 0;
-
-            // customized sun with parameters below
-            CUSTOM = 1;
-        }
-        optional Type type = 1;
-
-        // Azimuth sun angle, range 0..360 [deg]
-        optional float azimuth_deg = 2;
-
-        // altitude, ranges 0..90 [deg]
-        optional float altitude_deg = 3;
-
-        // intensity value, typical range 0..1 [-]
-        optional float intensity = 4;
-    }
-    optional Sun sun = 5;
-
-    // Configure rain particles.
-    // Note 1: The particles are rendered in real time, e.g. subsequent image requests should be made in real time
-    // for realistic rendering.
-    // Note 2: Rain sprites always appear to fall down vertically since camera velocity is not taken into account.
-    // The current implementation is only realistic for low speed camera movement.
-    // Note 3: Rain particles have an internal state. Image requests containing rain particles are no longer stateless
-    // and rendering result may be affected by other client requests.
-    message Rain {
-        optional bool enabled = 1;
-
-        // Intensity value, typical range 0..1 [-]
-        optional float intensity = 2;
-
-    }
-    optional Rain rain = 6;
-
-    // Configure snow particles
-    // Note 1: The particles are rendered in real time, e.g. subsequent image requests should be made in real time
-    // for realistic rendering.
-    // Note 2: Snow particles have an internal state. Image requests containing snow particles are no longer stateless
-    // and rendering result may be affected by other client requests.
-    message Snow {
-        optional bool enabled = 1;
-
-        // intensity value, typical range 0..1 [-]
-        optional float intensity = 2;
-
-    }
-    optional Snow snow = 7;
 }
 
 message ImageRequest {
@@ -157,7 +40,6 @@ message ImageRequest {
 
     // Camera pose C in world frame W (see ddln_common.proto)
     optional Pose extrinsics_WC = 5;
-    repeated SceneObject objects = 6;
     enum Type {
         // regular image
         DEFAULT = 0;
@@ -166,7 +48,6 @@ message ImageRequest {
         AUXILIARY = 1;
     }
     optional Type type = 7;
-    optional Environment environment = 8;
 }
 
 message ImageResponse {
