@@ -26,6 +26,12 @@ message Point3d {
     required double z = 3;
 }
 
+// Defines a ray (oriented line) in a Euclidean coordinate frame. The convention follows the Point3d.
+message Ray3d {
+    required Point3d origin = 1;
+    required Point3d direction = 2;
+}
+
 // Quaternions are used to represent a rotation and we make the restriction that they must have norm equal to 1.
 // The unit-normed quaternions be understood as a rotation around an axis defined by (x, y, z) and a magnitude of
 // arccos(w) / 2. By conventions the quaternion that transforms a vector in coordinate frame X to coordinate frame Y should
