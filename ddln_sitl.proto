@@ -25,7 +25,8 @@ service SitlService {
     // is set to the WorldInfo.start point.
     rpc GetWorldInfo(Empty) returns (WorldInfo);
 
-    // Intersection request in the SITL reference frame.
+    // Scene intersection request in the SITL reference frame. Only terrain
+    // and static objects are considered for intersection.
     // NB: Due to Imaginator implementation, on some worlds intersection
     // queries require the area to be prewarmed with Imaginator image
     // requests.
