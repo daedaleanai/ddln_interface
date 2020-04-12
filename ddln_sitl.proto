@@ -14,8 +14,20 @@ message UpdatePoseResponse {
 }
 
 service SitlService {
+    // Specify georeferenced origin of the SITL ENU reference frame.
     rpc SetOrigin(LatLongAlt) returns (Empty);
+
+    // Update ownship pose in SITL reference frame.
     rpc UpdatePose(UpdatePoseRequest) returns (UpdatePoseResponse);
+
+    // Gets current Imaginator scene world info.
+    // By default the georeferenced origin of the SITL referenced frame
+    // is set to the WorldInfo.start point.
     rpc GetWorldInfo(Empty) returns (WorldInfo);
+
+    // Intersection request in the SITL reference frame.
+    // NB: Due to Imaginator implementation, on some worlds intersection
+    // queries require the area to be prewarmed with Imaginator image
+    // requests.
     rpc WorldIntersection(WorldIntersectionRequest) returns (WorldIntersectionResponse);
 }
