@@ -27,8 +27,10 @@ service SitlService {
 
     // Scene intersection request in the SITL reference frame. Only terrain
     // and static objects are considered for intersection.
+    //
     // NB: Due to Imaginator implementation, on some worlds intersection
     // queries require the area to be prewarmed with Imaginator image
-    // requests.
+    // requests. The interface is likely to change to circumvent this
+    // limitation, use at your own risk.
     rpc WorldIntersection(WorldIntersectionRequest) returns (WorldIntersectionResponse);
 }
