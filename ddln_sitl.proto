@@ -3,6 +3,7 @@ syntax = "proto2";
 package ddln;
 
 import "ddln_common.proto";
+import "ddln_imaginator.proto";
 
 message UpdatePoseRequest {
     optional int64 timestamp_ns = 1;
@@ -13,6 +14,23 @@ message UpdatePoseResponse {
 }
 
 service SitlService {
+    // Specify georeferenced origin of the SITL ENU reference frame.
     rpc SetOrigin(LatLongAlt) returns (Empty);
+
+    // Update ownship pose in SITL reference frame.
     rpc UpdatePose(UpdatePoseRequest) returns (UpdatePoseResponse);
+
+    // Gets current Imaginator scene world info.
+    // By default the georeferenced origin of the SITL referenced frame
+    // is set to the WorldInfo.start point.
+    rpc GetWorldInfo(Empty) returns (WorldInfo);
+
+    // Scene intersection request in the SITL reference frame. Only terrain
+    // and static objects are considered for intersection.
+    //
+    // NB: Due to Imaginator implementation, on some worlds intersection
+    // queries require the area to be prewarmed with Imaginator image
+    // requests. The interface is likely to change to circumvent this
+    // limitation, use at your own risk.
+    rpc WorldIntersection(WorldIntersectionRequest) returns (WorldIntersectionResponse);
 }

@@ -183,6 +183,23 @@ message WorldInfo {
     optional LatLongAlt home_geo = 4;
 }
 
+// World intersection request with a 3D ray.
+message WorldIntersectionRequest {
+    repeated Ray3d rays_W = 1;
+}
+
+// World intersection response: first point encountered in the world.
+message WorldIntersectionResponse {
+    message Intersection {
+        // In case the ray didn't intersect anything, 'intersected' will be set to false and other values are meaningless.
+        required bool intersected = 1;
+        optional Point3d point_W = 2;
+    }
+
+    // One Intersection object is returned for each ray in WorldIntersectionRequest, in the same order.
+    repeated Intersection intersections = 1;
+}
+
 service ImageService {
     rpc GenerateImage(ImageRequest) returns (ImageResponse);
     rpc GetWorldInfo(Empty) returns (WorldInfo);
